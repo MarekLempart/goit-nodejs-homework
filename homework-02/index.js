@@ -1,4 +1,4 @@
-// index.js
+// "/homework-02/index.js"
 
 const app = require("./app");
 
