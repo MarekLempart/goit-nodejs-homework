@@ -3,6 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "homework-02": "nodemon homework-02/app.js",
+    "homework-03": "nodemon homework-03/app.js",
+    "homework-04": "nodemon homework-04/app.js",
+    "homework-05": "nodemon homework-05/app.js",
+    "homework-06": "nodemon homework-06/app.js",
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
     "lint": "eslint **/*.js",
