@@ -1,8 +1,8 @@
-// "/homework-02/models/contacts.js"
+// "/homework-02/models/contactsProcessing.js"
 
 const fs = require("fs").promises;
 const path = require("path");
-const { nanoid } = require("nanoid");
+// const { nanoid } = require("nanoid");
 
 const contactsPath = path.join(__dirname, "../contacts.json");
 
@@ -19,6 +19,7 @@ async function getById(id) {
 
 async function addContact({ name, email, phone }) {
   const contacts = await listContacts();
+  const { nanoid } = await import("nanoid");
   const newContact = { id: nanoid(), name, email, phone };
   contacts.push(newContact);
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
