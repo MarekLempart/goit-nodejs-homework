@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "homework-01": "nodemon homework-01/app.js",
     "homework-02": "nodemon homework-02/app.js",
     "homework-03": "nodemon homework-03/app.js",
     "homework-04": "nodemon homework-04/app.js",
