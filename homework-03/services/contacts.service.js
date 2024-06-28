@@ -1,4 +1,4 @@
-// contacts.service.js
+// homework-03/services/contacts.service.js
 const Contact = require("../models/contact.model");
 
 const getAll = async () => {

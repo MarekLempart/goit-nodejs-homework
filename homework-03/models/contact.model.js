@@ -1,4 +1,4 @@
-// contact.model.js
+// homework-03/models/contact.model.js
 
 const mongoose = require("mongoose");
 const { Schema } = mongoose;

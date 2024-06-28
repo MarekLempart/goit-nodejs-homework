@@ -5,7 +5,7 @@ require("dotenv").config();
 
 const express = require("express");
 const app = express();
-const connectRoutes = require("./routes/contacts.routes");
+const connectRoutes = require("./routes/contacts.route");
 const PORT = process.env.PORT || 3000;
 
 const connection = mongoose.connect(process.env.DATABASE_URL, {
