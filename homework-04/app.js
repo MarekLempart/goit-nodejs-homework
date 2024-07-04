@@ -12,11 +12,13 @@ const PORT = process.env.PORT || 3000;
 
 const connection = mongoose.connect(process.env.DATABASE_URL, {
   //   dbName: "db-contacts",
-  //   useNewUrlParser: true,
-  //   useUnifiedTopology: true,
+  // useNewUrlParser: true,
+  // useUnifiedTopology: true,
 });
 
 app.use(express.json());
+require("./config/passport");
+
 app.use("/api/v1", connectRoutes);
 app.use("/api/vi/auth", authRoutes);
 
