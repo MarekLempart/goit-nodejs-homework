@@ -1,4 +1,4 @@
-// homework-04/routes/contacts.route.js
+// homework-04/routes/contacts.routes.js
 
 const express = require("express");
 const router = express.Router();

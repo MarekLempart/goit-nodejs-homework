@@ -1,4 +1,4 @@
-// homework-04/routes/auth.route.js
+// homework-04/routes/auth.routes.js
 
 const express = require("express");
 const router = express.Router();
@@ -8,4 +8,4 @@ router.post("/signin", authController.signin);
 // router.post("/signout", authController.signout);
 router.post("/signup", authController.signup);
 
-module.export = router;
+module.exports = router;

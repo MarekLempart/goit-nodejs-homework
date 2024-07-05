@@ -20,7 +20,7 @@ const get = async (req, res) => {
         },
       });
     }
-    res.json({
+    return res.json({
       status: "success",
       code: 200,
       data: {
@@ -28,7 +28,7 @@ const get = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       code: 500,
       data: {
@@ -52,7 +52,7 @@ const getById = async (req, res) => {
         },
       });
     }
-    res.json({
+    return res.json({
       status: "success",
       code: 200,
       data: {
@@ -60,7 +60,7 @@ const getById = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       code: 500,
       data: {
@@ -84,7 +84,7 @@ const create = async (req, res, next) => {
       });
     }
     const results = await contactsService.create({ ...body, owner: user._id });
-    res.status(201).json({
+    return res.status(201).json({
       status: "success",
       code: 201,
       data: {
@@ -121,7 +121,7 @@ const update = async (req, res, next) => {
         },
       });
     }
-    res.json({
+    return res.json({
       status: "success",
       code: 200,
       data: {
@@ -163,7 +163,7 @@ const updateFavorite = async (req, res, next) => {
         },
       });
     }
-    res.json({
+    return res.json({
       status: "success",
       code: 200,
       data: {
@@ -190,7 +190,7 @@ const remove = async (req, res) => {
         },
       });
     }
-    res.status(204).json({
+    return res.status(204).json({
       status: "success",
       code: 204,
       data: {
@@ -199,7 +199,7 @@ const remove = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       code: 500,
       data: {

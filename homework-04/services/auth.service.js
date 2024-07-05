@@ -12,7 +12,7 @@ const signup = (user) => {
   // TODO: registration (instrukcja z bazy danych)
 };
 
-module.export = {
+module.exports = {
   signin,
   signout,
   signup,

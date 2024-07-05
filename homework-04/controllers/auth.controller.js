@@ -62,7 +62,7 @@ const signup = async (req, res, next) => {
   }
 };
 
-module.export = {
+module.exports = {
   signin,
   // signout,
   signup,
