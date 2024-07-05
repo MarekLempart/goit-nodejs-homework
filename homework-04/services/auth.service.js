@@ -4,7 +4,7 @@ const login = (credentials) => {
   // TODO: login (instrukcja z bazy danych/JWT)
 };
 
-const logout = () => {
+const logout = (userId) => {
   // TODO: logout (instrukcja z JWT)
 };
 

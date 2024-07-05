@@ -31,9 +31,28 @@ const login = async (req, res) => {
   });
 };
 
-// const logout = (req, res) => {
-//   // TODO; logout
-// };
+const logout = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(401).json({
+        status: "error",
+        code: 401,
+        message: "Not authorized",
+      });
+    }
+    user.token = null;
+    await user.save();
+    return res.status(204).send();
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      code: 500,
+      message: error.message,
+    });
+  }
+};
 
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
@@ -64,6 +83,6 @@ const signup = async (req, res, next) => {
 
 module.exports = {
   login,
-  // logout,
+  logout,
   signup,
 };
