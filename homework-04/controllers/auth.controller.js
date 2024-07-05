@@ -1,9 +1,22 @@
 // homework-04/controllers/auth.controller.js
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
+const { signupSchema, loginSchema } = require("../services/validation");
 
 const login = async (req, res) => {
   const { email, password } = req.body;
+
+  const { error } = loginSchema.validate({ email, password });
+  if (error) {
+    return res.status(400).json({
+      status: "validation-error",
+      code: 400,
+      data: {
+        message: error.details[0].message,
+      },
+    });
+  }
+
   const user = await User.findOne({ email });
 
   if (!user || !user.validPassword(password)) {
@@ -56,6 +69,18 @@ const logout = async (req, res) => {
 
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
+
+  const { error } = signupSchema.validate({ email, password });
+  if (error) {
+    return res.status(400).json({
+      status: "validation-error",
+      code: 400,
+      data: {
+        message: error.details[0].message,
+      },
+    });
+  }
+
   const user = await User.findOne({ email }).lean();
   if (user) {
     return res.status(409).json({
@@ -81,8 +106,37 @@ const signup = async (req, res, next) => {
   }
 };
 
+const getCurrentUser = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(401).json({
+        status: "error",
+        code: 401,
+        message: "Not authorized",
+      });
+    }
+    return res.status(200).json({
+      status: "success",
+      code: 200,
+      data: {
+        email: user.email,
+        subscription: user.subscription,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      code: 500,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   login,
   logout,
   signup,
+  getCurrentUser,
 };

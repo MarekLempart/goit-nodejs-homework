@@ -1,8 +1,13 @@
 // homework-04/services/contacts.service.js
 const Contact = require("../models/contact.model");
 
-const getAll = async (query) => {
-  return Contact.find(query);
+const getAll = async ({ owner, page = 1, limit = 20, ...query }) => {
+  const skip = (page - 1) * limit;
+  const contacts = await Contact.find({ owner, ...query })
+    .skip(skip)
+    .limit(limit)
+    .exec();
+  return contacts;
 };
 
 const getOne = async (id, userId) => {

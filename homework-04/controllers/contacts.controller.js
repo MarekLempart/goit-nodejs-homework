@@ -10,7 +10,15 @@ const {
 const get = async (req, res) => {
   try {
     const { query, user } = req;
-    const results = await contactsService.getAll({ ...query, owner: user._id });
+    const { page = 1, limit = 20 } = query;
+
+    const results = await contactsService.getAll({
+      ...query,
+      owner: user._id,
+      page: parseInt(page),
+      limit: parseInt(limit),
+    });
+
     if (!results) {
       return res.status(404).json({
         status: "not-found",

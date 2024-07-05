@@ -20,7 +20,7 @@ app.use(express.json());
 require("./config/passport");
 
 app.use("/api/v1", contactRoutes);
-app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/users", authRoutes);
 
 connection
   .then(() => {
