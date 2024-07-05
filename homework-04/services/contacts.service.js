@@ -1,9 +1,16 @@
 // homework-04/services/contacts.service.js
 const Contact = require("../models/contact.model");
 
-const getAll = async ({ owner, page = 1, limit = 20, ...query }) => {
+const getAll = async ({ owner, page = 1, limit = 20, favorite, ...query }) => {
   const skip = (page - 1) * limit;
-  const contacts = await Contact.find({ owner, ...query })
+  const filter = { owner, ...query };
+
+  if (favorite !== undefined) {
+    filter.favorite = favorite === "true";
+  }
+
+  const contacts = await Contact.find(filter)
+    // const contacts = await Contact.find({ owner, ...query })
     .skip(skip)
     .limit(limit)
     .exec();
