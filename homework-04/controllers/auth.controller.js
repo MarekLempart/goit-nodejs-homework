@@ -2,7 +2,7 @@
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 
-const signin = async (req, res) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
@@ -31,7 +31,7 @@ const signin = async (req, res) => {
   });
 };
 
-// const signout = (req, res) => {
+// const logout = (req, res) => {
 //   // TODO; logout
 // };
 
@@ -63,7 +63,7 @@ const signup = async (req, res, next) => {
 };
 
 module.exports = {
-  signin,
-  // signout,
+  login,
+  // logout,
   signup,
 };

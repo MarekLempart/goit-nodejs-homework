@@ -1,10 +1,10 @@
 // homework-04/services/auth.service.js
 
-const signin = (credentials) => {
+const login = (credentials) => {
   // TODO: login (instrukcja z bazy danych/JWT)
 };
 
-const signout = () => {
+const logout = () => {
   // TODO: logout (instrukcja z JWT)
 };
 
@@ -13,7 +13,7 @@ const signup = (user) => {
 };
 
 module.exports = {
-  signin,
-  signout,
+  login,
+  logout,
   signup,
 };
