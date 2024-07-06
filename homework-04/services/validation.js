@@ -9,16 +9,6 @@ const passwordValidation = Joi.string()
   .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/)
   .required();
 
-const signupSchema = Joi.object({
-  email: emailValidation,
-  password: passwordValidation,
-});
-
-const loginSchema = Joi.object({
-  email: emailValidation,
-  password: passwordValidation,
-});
-
 const contactSchema = Joi.object({
   name: Joi.string().min(2).max(30).required(),
   email: Joi.string().email(),
@@ -37,10 +27,25 @@ const favoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
+const signupSchema = Joi.object({
+  email: emailValidation,
+  password: passwordValidation,
+});
+
+const loginSchema = Joi.object({
+  email: emailValidation,
+  password: passwordValidation,
+});
+
+const subscriptionSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
 module.exports = {
-  signupSchema,
-  loginSchema,
   contactSchema,
   contactUpdateSchema,
   favoriteSchema,
+  signupSchema,
+  loginSchema,
+  subscriptionSchema,
 };
