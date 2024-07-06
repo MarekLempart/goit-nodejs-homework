@@ -1,27 +1,39 @@
 // homework-04/services/contacts.service.js
 const Contact = require("../models/contact.model");
 
-const getAll = async () => {
-  return Contact.find();
+const getAll = async ({ owner, page = 1, limit = 20, favorite, ...query }) => {
+  const skip = (page - 1) * limit;
+  const filter = { owner, ...query };
+
+  if (favorite !== undefined) {
+    filter.favorite = favorite === "true";
+  }
+
+  const contacts = await Contact.find(filter)
+    // const contacts = await Contact.find({ owner, ...query })
+    .skip(skip)
+    .limit(limit)
+    .exec();
+  return contacts;
 };
 
-const getOne = async (id) => {
-  return Contact.findById(id);
+const getOne = async (id, userId) => {
+  return Contact.findOne({ _id: id, owner: userId });
 };
 
 const create = async (data) => {
   return Contact.create(data);
 };
 
-const update = async (id, data) => {
-  return Contact.findByIdAndUpdate(id, data, {
+const update = async (id, userId, data) => {
+  return Contact.findOneAndUpdate({ _id: id, owner: userId }, data, {
     new: true,
   });
 };
 
-const updateFavorite = async (id, favorite) => {
-  return Contact.findByIdAndUpdate(
-    id,
+const updateFavorite = async (id, userId, favorite) => {
+  return Contact.findOneAndUpdate(
+    { _id: id, owner: userId },
     { favorite },
     {
       new: true,
@@ -29,8 +41,8 @@ const updateFavorite = async (id, favorite) => {
   );
 };
 
-const remove = async (id) => {
-  return Contact.findByIdAndDelete(id);
+const remove = async (id, userId) => {
+  return Contact.findOneAndDelete({ _id: id, owner: userId });
 };
 
 module.exports = {

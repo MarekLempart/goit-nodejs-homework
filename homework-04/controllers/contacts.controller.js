@@ -9,7 +9,16 @@ const {
 
 const get = async (req, res) => {
   try {
-    const results = await contactsService.getAll();
+    const { query, user } = req;
+    const { page = 1, limit = 20 } = query;
+
+    const results = await contactsService.getAll({
+      ...query,
+      owner: user._id,
+      page: parseInt(page),
+      limit: parseInt(limit),
+    });
+
     if (!results) {
       return res.status(404).json({
         status: "not-found",
@@ -19,7 +28,7 @@ const get = async (req, res) => {
         },
       });
     }
-    res.json({
+    return res.json({
       status: "success",
       code: 200,
       data: {
@@ -27,7 +36,7 @@ const get = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       code: 500,
       data: {
@@ -39,8 +48,9 @@ const get = async (req, res) => {
 
 const getById = async (req, res) => {
   try {
-    const { id } = req.params;
-    const results = await contactsService.getOne(id);
+    const { params, user } = req;
+    const { id } = params;
+    const results = await contactsService.getOne(id, user._id);
     if (!results) {
       return res.status(404).json({
         status: "not-found",
@@ -50,7 +60,7 @@ const getById = async (req, res) => {
         },
       });
     }
-    res.json({
+    return res.json({
       status: "success",
       code: 200,
       data: {
@@ -58,7 +68,7 @@ const getById = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       code: 500,
       data: {
@@ -70,7 +80,7 @@ const getById = async (req, res) => {
 
 const create = async (req, res, next) => {
   try {
-    const { body } = req;
+    const { body, user } = req;
     const { error } = contactSchema.validate(body);
     if (error) {
       return res.status(400).json({
@@ -81,8 +91,8 @@ const create = async (req, res, next) => {
         },
       });
     }
-    const results = await contactsService.create(body);
-    res.status(201).json({
+    const results = await contactsService.create({ ...body, owner: user._id });
+    return res.status(201).json({
       status: "success",
       code: 201,
       data: {
@@ -97,7 +107,7 @@ const create = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   try {
-    const { body } = req;
+    const { body, user } = req;
     const { error } = contactUpdateSchema.validate(body);
     if (error) {
       return res.status(400).json({
@@ -109,7 +119,7 @@ const update = async (req, res, next) => {
       });
     }
     const { id } = req.params;
-    const results = await contactsService.update(id, body);
+    const results = await contactsService.update(id, user, user._id, body);
     if (!results) {
       return res.status(404).json({
         status: "not-found",
@@ -119,7 +129,7 @@ const update = async (req, res, next) => {
         },
       });
     }
-    res.json({
+    return res.json({
       status: "success",
       code: 200,
       data: {
@@ -134,6 +144,7 @@ const update = async (req, res, next) => {
 
 const updateFavorite = async (req, res, next) => {
   try {
+    const { body, params, user } = req;
     const { error } = favoriteSchema.validate(req.body);
     if (error) {
       return res.status(400).json({
@@ -144,9 +155,13 @@ const updateFavorite = async (req, res, next) => {
         },
       });
     }
-    const { id } = req.params;
-    const { favorite } = req.body;
-    const results = await contactsService.updateFavorite(id, favorite);
+    const { id } = params;
+    const { favorite } = body;
+    const results = await contactsService.updateFavorite(
+      id,
+      user._id,
+      favorite
+    );
     if (!results) {
       return res.status(404).json({
         status: "not-found",
@@ -156,7 +171,7 @@ const updateFavorite = async (req, res, next) => {
         },
       });
     }
-    res.json({
+    return res.json({
       status: "success",
       code: 200,
       data: {
@@ -172,7 +187,8 @@ const updateFavorite = async (req, res, next) => {
 const remove = async (req, res) => {
   try {
     const { id } = req.params;
-    const results = await contactsService.remove(id);
+    const { user } = req;
+    const results = await contactsService.remove(id, user._id);
     if (!results) {
       return res.status(404).json({
         status: "not-found",
@@ -182,7 +198,7 @@ const remove = async (req, res) => {
         },
       });
     }
-    res.status(204).json({
+    return res.status(204).json({
       status: "success",
       code: 204,
       data: {
@@ -191,7 +207,7 @@ const remove = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       code: 500,
       data: {

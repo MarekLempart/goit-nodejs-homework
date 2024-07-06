@@ -5,25 +5,27 @@ require("dotenv").config();
 
 const express = require("express");
 const app = express();
-const connectRoutes = require("./routes/contacts.route");
-const authRoutes = require("./routes/auth.route");
+const contactRoutes = require("./routes/contacts.routes");
+const authRoutes = require("./routes/auth.routes");
 
 const PORT = process.env.PORT || 3000;
 
 const connection = mongoose.connect(process.env.DATABASE_URL, {
   //   dbName: "db-contacts",
-  //   useNewUrlParser: true,
-  //   useUnifiedTopology: true,
+  // useNewUrlParser: true,
+  // useUnifiedTopology: true,
 });
 
 app.use(express.json());
-app.use("/api/v1", connectRoutes);
-app.use("/api/vi/auth", authRoutes);
+require("./config/passport");
+
+app.use("/api/v1", contactRoutes);
+app.use("/api/v1/users", authRoutes);
 
 connection
   .then(() => {
     console.log("Database connection successful");
-    app.listen(PORT, () => {
+    app.listen(PORT, async () => {
       console.log(`App listens on port ${PORT}`);
     });
   })
