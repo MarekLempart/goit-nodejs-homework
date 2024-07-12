@@ -2,6 +2,7 @@
 
 const mongoose = require("mongoose");
 require("dotenv").config();
+const path = require("path");
 
 const express = require("express");
 const app = express();
@@ -17,6 +18,7 @@ const connection = mongoose.connect(process.env.DATABASE_URL, {
 });
 
 app.use(express.json());
+app.use(express.static(path.resolve(__dirname, "public")));
 require("./config/passport");
 
 app.use("/api/v1", contactRoutes);
