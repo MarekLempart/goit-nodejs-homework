@@ -39,6 +39,9 @@ const login = async (req, res) => {
 
   const secret = process.env.SECRET;
   const token = jwt.sign(payload, secret, { expiresIn: "1h" });
+  user.token = token;
+  await user.save();
+
   return res.json({
     status: "success",
     code: 200,
@@ -52,13 +55,6 @@ const logout = async (req, res) => {
   try {
     const { id } = req.user;
     const user = await User.findById(id);
-    if (!user) {
-      return res.status(401).json({
-        status: "error",
-        code: 401,
-        message: "Not authorized",
-      });
-    }
     user.token = null;
     await user.save();
     return res.status(204).send();
@@ -112,21 +108,13 @@ const signup = async (req, res, next) => {
 
 const getCurrentUser = async (req, res) => {
   try {
-    const { id } = req.user;
-    const user = await User.findById(id);
-    if (!user) {
-      return res.status(401).json({
-        status: "error",
-        code: 401,
-        message: "Not authorized",
-      });
-    }
+    const { email, subscription } = req.user;
     return res.status(200).json({
       status: "success",
       code: 200,
       data: {
-        email: user.email,
-        subscription: user.subscription,
+        email,
+        subscription,
       },
     });
   } catch (error) {

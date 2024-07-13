@@ -2,13 +2,12 @@
 
 const mongoose = require("mongoose");
 require("dotenv").config();
-const path = require("path");
 
 const express = require("express");
 const app = express();
 const contactRoutes = require("./routes/contacts.routes");
 const authRoutes = require("./routes/auth.routes");
-const passport = require("passport");
+const setupDirectories = require("./services/directorySetup");
 
 const PORT = process.env.PORT || 3000;
 
@@ -19,16 +18,15 @@ const connection = mongoose.connect(process.env.DATABASE_URL, {
 });
 
 app.use(express.json());
-app.use(express.static(path.resolve(__dirname, "public")));
 require("./config/passport");
 
-app.use(passport.initialize());
 app.use("/api/v1", contactRoutes);
 app.use("/api/v1/users", authRoutes);
 
 connection
-  .then(() => {
+  .then(async () => {
     console.log("Database connection successful");
+    await setupDirectories();
     app.listen(PORT, async () => {
       console.log(`App listens on port ${PORT}`);
     });

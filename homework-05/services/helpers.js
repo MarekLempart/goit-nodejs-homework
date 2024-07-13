@@ -1,3 +1,5 @@
+// homework-05/services/helpers.js
+
 const fs = require("fs").promises;
 const Jimp = require("jimp");
 
@@ -11,7 +13,7 @@ const setupFolder = async (path) => {
   const folderExist = await isAccessible(path);
   if (!folderExist) {
     try {
-      await fs.mkdir(path);
+      await fs.mkdir(path, { recursive: true });
     } catch (error) {
       console.log("No permissions!");
       process.exit(1);
@@ -31,7 +33,7 @@ const isImageAndTransform = async (path) =>
         await image
           .rotate(360)
           .resize(MAX_AVATAR_WIDTH, MAX_AVATAR_HEIGHT)
-          .write(path);
+          .writeAsync(path);
         resolve(true);
       } catch (error) {
         console.log(error);

@@ -1,16 +1,22 @@
+// homework-05/middlewares/upload.js
+
 const multer = require("multer");
 const path = require("path");
 
+const setupFolder = require("../services/helpers").setupFolder;
 const tempDir = path.join(__dirname, "../tmp");
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: async (req, file, cb) => {
+    await setupFolder(tempDir);
     cb(null, tempDir);
   },
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}-${file.originalname}`);
   },
 });
+
+setupFolder(tempDir);
 
 const upload = multer({
   storage: storage,

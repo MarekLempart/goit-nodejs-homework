@@ -10,7 +10,50 @@ const gravatar = require("gravatar");
 // const Jimp = require("jimp");
 const fs = require("fs").promises;
 const path = require("path");
-const { isImageAndTransform } = require("../services/helpers");
+const { isImageAndTransform, setupFolder } = require("../services/helpers");
+
+// const login = async (req, res) => {
+//   const { email, password } = req.body;
+
+//   const { error } = loginSchema.validate({ email, password });
+//   if (error) {
+//     return res.status(400).json({
+//       status: "validation-error",
+//       code: 400,
+//       data: {
+//         message: error.details[0].message,
+//       },
+//     });
+//   }
+
+//   const user = await User.findOne({ email });
+
+//   if (!user || !user.validPassword(password)) {
+//     return res.status(400).json({
+//       status: "error",
+//       code: 400,
+//       message: "Incorrect login or password",
+//       data: "Bad request",
+//     });
+//   }
+
+//   const payload = {
+//     id: user.id,
+//     username: user.username,
+//   };
+
+//   const secret = process.env.SECRET;
+//   const token = jwt.sign(payload, secret, { expiresIn: "1h" });
+//   user.token = token;
+//   await user.save();
+//   return res.json({
+//     status: "success",
+//     code: 200,
+//     data: {
+//       token,
+//     },
+//   });
+// };
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -46,6 +89,7 @@ const login = async (req, res) => {
   const token = jwt.sign(payload, secret, { expiresIn: "1h" });
   user.token = token;
   await user.save();
+  console.log("Generated token:", token); // Dodaj to logowanie
   return res.json({
     status: "success",
     code: 200,
@@ -178,13 +222,55 @@ const updateSubscription = async (req, res) => {
   }
 };
 
+// const updateAvatar = async (req, res) => {
+//   try {
+//     const { id } = req.user;
+//     const { path: temporaryPath, filename } = req.file;
+//     const fileExtension = path.extname(filename);
+//     const newFileName = `${id}${fileExtension}`;
+//     const newFilePath = path.join(__dirname, "../public/avatars", newFileName);
+
+//     await setupFolder(path.join(__dirname, "../public/avatars"));
+
+//     const isImageValid = await isImageAndTransform(temporaryPath);
+//     if (!isImageValid) {
+//       await fs.unlink(temporaryPath);
+//       return res.status(400).json({
+//         status: "error",
+//         code: 400,
+//         message: "Invalid image file",
+//       });
+//     }
+
+//     await fs.rename(temporaryPath, newFilePath);
+//     const avatarURL = `/avatars/${newFileName}`;
+//     await User.findByIdAndUpdate(id, { avatarURL }, { new: true });
+
+//     return res.status(200).json({
+//       status: "success",
+//       code: 200,
+//       data: {
+//         avatarURL,
+//       },
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       status: "error",
+//       code: 500,
+//       message: error.message,
+//     });
+//   }
+// };
+
 const updateAvatar = async (req, res) => {
   try {
-    const { id } = req.user;
+    const { id } = req.user; // Upewnij się, że req.user jest poprawnie ustawione
     const { path: temporaryPath, filename } = req.file;
     const fileExtension = path.extname(filename);
     const newFileName = `${id}${fileExtension}`;
     const newFilePath = path.join(__dirname, "../public/avatars", newFileName);
+
+    await setupFolder(path.join(__dirname, "../public/avatars"));
 
     const isImageValid = await isImageAndTransform(temporaryPath);
     if (!isImageValid) {
@@ -208,6 +294,7 @@ const updateAvatar = async (req, res) => {
       },
     });
   } catch (error) {
+    console.log("Update avatar error:", error); // Dodaj to logowanie
     return res.status(500).json({
       status: "error",
       code: 500,

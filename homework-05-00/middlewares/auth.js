@@ -1,4 +1,4 @@
-// homework-04/middlewares/auth.js
+// homework-05/middlewares/auth.js
 
 const passport = require("passport");
 const User = require("../models/user.model");
