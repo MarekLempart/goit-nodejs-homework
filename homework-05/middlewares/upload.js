@@ -2,9 +2,10 @@
 
 const multer = require("multer");
 const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
-const setupFolder = require("../services/helpers").setupFolder;
-const tempDir = path.join(__dirname, "../tmp");
+const { setupFolder } = require("../services/helpers");
+const tempDir = path.join(__dirname, "../public/tmp");
 
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {
@@ -12,11 +13,10 @@ const storage = multer.diskStorage({
     cb(null, tempDir);
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
+    const uniqueName = `${uuidv4()}-${file.originalname}`;
+    cb(null, uniqueName);
   },
 });
-
-setupFolder(tempDir);
 
 const upload = multer({
   storage: storage,

@@ -3,6 +3,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const bcrypt = require("bcryptjs");
+const gravatar = require("gravatar");
 
 const user = new Schema({
   password: {
@@ -26,6 +27,9 @@ const user = new Schema({
   avatarURL: {
     type: String,
     required: true,
+    default: function () {
+      return gravatar.url(this.email, { s: "250", d: "retro" }, true);
+    },
   },
 });
 
