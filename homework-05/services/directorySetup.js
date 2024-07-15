@@ -16,7 +16,7 @@ const setupDirectories = async () => {
   const directories = [
     path.join(__dirname, "../public"),
     path.join(__dirname, "../public/avatars"),
-    path.join(__dirname, "../public/tmp"),
+    path.join(__dirname, "../tmp"),
   ];
 
   for (const dir of directories) {
