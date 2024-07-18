@@ -9,7 +9,7 @@ const config = {
   port: process.env.MAIL_PORT,
   secure: false,
   auth: {
-    user: process.env.MAIL_USER,
+    user: process.env.API,
     pass: process.env.API_KEY,
   },
 };
@@ -17,7 +17,7 @@ const config = {
 const send = async ({ to, subject, html }) => {
   const transporter = nodemailer.createTransport(config);
   const emailOptions = {
-    from: process.env.MAIL_POST,
+    from: process.env.MAIL_USER,
     to,
     subject,
     html,
