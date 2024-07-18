@@ -9,11 +9,7 @@ const getAll = async ({ owner, page = 1, limit = 20, favorite, ...query }) => {
     filter.favorite = favorite === "true";
   }
 
-  const contacts = await Contact.find(filter)
-    // const contacts = await Contact.find({ owner, ...query })
-    .skip(skip)
-    .limit(limit)
-    .exec();
+  const contacts = await Contact.find(filter).skip(skip).limit(limit).exec();
   return contacts;
 };
 

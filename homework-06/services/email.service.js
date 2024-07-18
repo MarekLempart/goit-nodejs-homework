@@ -10,14 +10,14 @@ const config = {
   secure: false,
   auth: {
     user: process.env.API,
-    pass: process.env.API_KEY,
+    pass: process.env.SENDGRID_API_KEY,
   },
 };
 
 const send = async ({ to, subject, html }) => {
   const transporter = nodemailer.createTransport(config);
   const emailOptions = {
-    from: process.env.MAIL_USER,
+    from: process.env.EMAIL_FROM,
     to,
     subject,
     html,
