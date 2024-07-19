@@ -5,6 +5,8 @@ const router = express.Router();
 const authController = require("../controllers/auth.controller");
 const auth = require("../middlewares/auth");
 const upload = require("../middlewares/upload");
+const verifyEmail = require("../controllers/auth/verifyEmail");
+const resendVerificationEmail = require("../controllers/auth/resendVerificationEmail");
 
 router.post("/login", authController.login);
 router.get("/logout", auth, authController.logout);
@@ -17,5 +19,7 @@ router.patch(
   upload.single("avatar"),
   authController.updateAvatar
 );
+router.get("/verify/:verificationToken", verifyEmail);
+router.post("/verify", resendVerificationEmail);
 
 module.exports = router;

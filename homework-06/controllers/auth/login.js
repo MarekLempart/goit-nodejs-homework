@@ -4,6 +4,8 @@ const User = require("../../models/user.model");
 const jwt = require("jsonwebtoken");
 const { loginSchema } = require("../../services/validation");
 const gravatar = require("gravatar");
+const { v4: uuidv4 } = require("uuid");
+const emailService = require("../../services/email.service");
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -27,6 +29,28 @@ const login = async (req, res) => {
       code: 400,
       message: "Incorrect login or password",
       data: "Bad request",
+    });
+  }
+
+  if (
+    typeof user.verify === "undefined" ||
+    typeof user.verificationToken === "undefined"
+  ) {
+    user.verify = false;
+    user.verificationToken = uuidv4();
+    await user.save();
+  }
+
+  if (!user.verify) {
+    const verificationLink = `${req.protocol}://${req.get(
+      "host"
+    )}/api/v1/users/verify/${user.verificationToken}`;
+    await emailService.sendVerificationEmail(email, verificationLink);
+
+    return res.status(401).json({
+      status: "error",
+      code: 401,
+      message: "Email is not verified. Verification email sent.",
     });
   }
 

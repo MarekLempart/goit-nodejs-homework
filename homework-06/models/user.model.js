@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
+const { v4: uuidv4 } = require("uuid");
 
 const user = new Schema({
   password: {
@@ -38,6 +39,10 @@ const user = new Schema({
   verificationToken: {
     type: String,
     required: [true, "Verify token is required"],
+    default: function () {
+      return this.verify ? null : uuidv4();
+    },
+    // default: null,
   },
 });
 

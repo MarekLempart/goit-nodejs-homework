@@ -41,6 +41,10 @@ const subscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
+const resendEmailSchema = Joi.object({
+  email: emailValidation,
+});
+
 module.exports = {
   contactSchema,
   contactUpdateSchema,
@@ -48,4 +52,5 @@ module.exports = {
   signupSchema,
   loginSchema,
   subscriptionSchema,
+  resendEmailSchema,
 };
